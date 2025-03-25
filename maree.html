@@ -4,49 +4,31 @@
   <meta charset="UTF-8">
   <title>Marées Saint-Malo</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
+    html, body {
       margin: 0;
-      padding: 1em;
-      color: #253081;
+      padding: 0;
       background-color: white;
+      overflow: hidden;
     }
-    h3 {
-      margin-bottom: 0.5em;
-    }
-    ul {
-      list-style: none;
-      padding-left: 0;
-      font-size: 1.3em;
+
+    .wrapper {
+      transform: scale(2); /* Agrandissement x2 */
+      transform-origin: top left;
+      width: 226px;
+      height: 217px;
     }
   </style>
 </head>
 <body>
-  <div id="maree-saintmalo">
-    Chargement des marées...
+  <div class="wrapper">
+    <iframe 
+      src="https://horloge.maree.frbateaux.net/ws52" 
+      width="226" 
+      height="217" 
+      frameborder="0" 
+      scrolling="no" 
+      style="border: none;">
+    </iframe>
   </div>
-
-  <script>
-    async function afficherMarees() {
-      try {
-        const response = await fetch("https://www.maree.info/json/38");
-        const data = await response.json();
-
-        const bloc = document.getElementById("maree-saintmalo");
-        let html = `<h3>🌊 Marées à Saint-Malo – Aujourd’hui</h3><ul>`;
-
-        data.next_tides.forEach(m => {
-          html += `<li>🕒 ${m.type === 'PM' ? 'Pleine mer' : 'Basse mer'} : ${m.hour} – Coef ${m.coefficient || '-'}</li>`;
-        });
-
-        html += "</ul>";
-        bloc.innerHTML = html;
-      } catch (e) {
-        document.getElementById("maree-saintmalo").innerText = "Impossible de charger les données de marée.";
-      }
-    }
-
-    afficherMarees();
-  </script>
 </body>
 </html>
