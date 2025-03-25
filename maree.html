@@ -1,0 +1,27 @@
+<div id="maree-saintmalo" style="font-family: Arial; color: #253081; font-size: 1.2em; padding: 1em;">
+  Chargement des marées...
+</div>
+
+<script>
+  async function afficherMarees() {
+    const response = await fetch("https://www.maree.info/api/tides/38");
+    const data = await response.json();
+    
+    const aujourdHui = new Date().toISOString().split('T')[0];
+    const mareesJour = data.tides.filter(m => m.date.startsWith(aujourdHui));
+
+    const bloc = document.getElementById("maree-saintmalo");
+    let html = `<h3>🌊 Marées à Saint-Malo – Aujourd’hui</h3><ul style="list-style:none;padding-left:0;">`;
+
+    mareesJour.forEach(maree => {
+      const type = maree.coef > 50 ? "Pleine mer" : "Basse mer";
+      const heure = maree.date.split("T")[1].slice(0,5);
+      html += `<li>🕒 ${type} : ${heure} – Coef ${maree.coef}</li>`;
+    });
+
+    html += "</ul>";
+    bloc.innerHTML = html;
+  }
+
+  afficherMarees();
+</script>
