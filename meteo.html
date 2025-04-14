@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Météo Dinard</title>
+</head>
+<body style="margin:0;">
+  <a class="weatherwidget-io" 
+     href="https://forecast7.com/fr/48d63n2d06/dinard/" 
+     data-label_1="DINARD" 
+     data-label_2="Météo" 
+     data-font="Arial Black" 
+     data-icons="Climacons Animated" 
+     data-days="5" 
+     data-theme="clear" 
+     data-textcolor="#253081" 
+     data-mooncolor="#253081" 
+     data-cloudcolor="#253081" 
+     data-snowcolor="#253081">DINARD Météo</a>
+
+  <script>
+    !function(d,s,id){
+      var js,fjs=d.getElementsByTagName(s)[0];
+      if(!d.getElementById(id)){
+        js=d.createElement(s);
+        js.id=id;
+        js.src='https://weatherwidget.io/js/widget.min.js';
+        fjs.parentNode.insertBefore(js,fjs);
+      }
+    }(document,'script','weatherwidget-io-js');
+  </script>
+</body>
+</html>
