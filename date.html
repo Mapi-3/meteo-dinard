@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Date & Heure - Sport Bretagne</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #fff;
+      color: #253081;
+      font-family: Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      flex-direction: column;
+    }
+    .datetime-container {
+      text-align: center;
+      padding: 1em 2em;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      background: #f9f9f9;
+    }
+    .date {
+      font-size: 1.4em;
+      margin-bottom: 0.4em;
+      color: #253081;
+      font-weight: bold;
+    }
+    .time {
+      font-size: 2.5em;
+      font-weight: bold;
+      color: #CF1C71;
+    }
+  </style>
+</head>
+<body>
+  <div class="datetime-container">
+    <div class="date" id="current-date"></div>
+    <div class="time" id="current-time"></div>
+  </div>
+
+  <script>
+    function updateDateTime() {
+      const now = new Date();
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      const dateString = now.toLocaleDateString('fr-FR', options);
+      const timeString = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+
+      document.getElementById('current-date').textContent = dateString;
+      document.getElementById('current-time').textContent = timeString;
+    }
+
+    setInterval(updateDateTime, 1000);
+    updateDateTime();
+  </script>
+</body>
+</html>
