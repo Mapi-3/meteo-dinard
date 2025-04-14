@@ -16,9 +16,13 @@
       padding: 1em;
       transition: transform 0.5s ease-in-out;
       will-change: transform;
+      scroll-behavior: smooth;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
     }
     .card {
-      flex: 0 0 25%;
+      flex: 0 0 220px;
+      scroll-snap-align: start;
       border-radius: 12px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       padding: 1em;
@@ -56,7 +60,7 @@
     }
     .image {
       width: 100%;
-      height: 150px;
+      height: 120px;
       object-fit: cover;
       border-radius: 8px;
       margin-bottom: 0.6em;
@@ -79,12 +83,16 @@
         const badgeType = item.categories.some(cat => /emploi|recrut/i.test(cat)) ? "emploi" : "actu";
         const badgeText = badgeType === "emploi" ? "Offre d'emploi" : "Actualité";
         const pubDate = new Date(item.pubDate).toLocaleDateString('fr-FR');
+
         let imageUrl = "https://www.sportbretagne.bzh/wp-content/uploads/2023/03/logo-sportbretagne-bleu.png";
-        const match = item.description.match(/<img[^>]+src=\"([^\"]+)\"/);
-        if (match && match[1]) {
-          imageUrl = match[1];
+        const tempDiv = document.createElement("div");
+        tempDiv.innerHTML = item.content || item.description;
+        const imgTag = tempDiv.querySelector("img");
+        if (imgTag && imgTag.src) {
+          imageUrl = imgTag.src;
         }
-        const description = item.description.replace(/<[^>]+>/g, '').substring(0, 500) + "...";
+
+        const description = tempDiv.textContent.trim().substring(0, 500) + "...";
 
         const card = document.createElement("div");
         card.className = "card";
@@ -104,9 +112,9 @@
 
     function startCarousel() {
       const carousel = document.querySelector('.carousel');
-      let scrollAmount = 0;
-      const scrollStep = 310; // Approx width of one card + gap
+      const scrollStep = 230; // Adjusted for card width + gap
       const intervalTime = 10000; // 10 seconds
+      let scrollAmount = 0;
 
       setInterval(() => {
         scrollAmount += scrollStep;
@@ -121,4 +129,3 @@
   </script>
 </body>
 </html>
-
