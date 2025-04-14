@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Flux Sport Bretagne</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #fff; color: #333; }
+    .carousel {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      gap: 1em;
+      padding: 1em;
+    }
+    .card {
+      flex: 0 0 300px;
+      scroll-snap-align: start;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      padding: 1em;
+      background: #f9f9f9;
+      transition: transform 0.3s;
+    }
+    .card:hover { transform: scale(1.02); }
+    .badge {
+      display: inline-block;
+      padding: 0.2em 0.6em;
+      border-radius: 20px;
+      font-size: 0.75em;
+      color: white;
+      margin-bottom: 0.5em;
+    }
+    .badge.emploi { background-color: #CF1C71; }
+    .badge.actu { background-color: #253081; }
+    .title {
+      font-size: 1em;
+      font-weight: bold;
+      margin-bottom: 0.4em;
+    }
+    .date {
+      font-size: 0.8em;
+      color: #777;
+      margin-bottom: 0.6em;
+    }
+    .desc {
+      font-size: 0.85em;
+      margin-bottom: 0.6em;
+      color: #444;
+      line-height: 1.3em;
+      max-height: 6.5em;
+      overflow: hidden;
+    }
+    .image {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 0.6em;
+    }
+    a { text-decoration: none; color: inherit; }
+  </style>
+</head>
+<body>
+  <div class="carousel" id="carousel"></div>
+
+  <script>
+    async function loadRSS() {
+      const response = await fetch("https://api.rss2json.com/v1/api.json?rss_url=https://www.sportbretagne.bzh/feed/");
+      const data = await response.json();
+      const container = document.getElementById("carousel");
+
+      data.items.slice(0, 10).forEach(item => {
+        const badgeType = item.categories.some(cat => /emploi|recrut/i.test(cat)) ? "emploi" : "actu";
+        const badgeText = badgeType === "emploi" ? "Offre d'emploi" : "Actualité";
+        const pubDate = new Date(item.pubDate).toLocaleDateString('fr-FR');
+        const imageUrl = item.thumbnail || "https://www.sportbretagne.bzh/wp-content/uploads/2023/03/logo-sportbretagne-bleu.png";
+        const description = item.description.replace(/<[^>]+>/g, '').substring(0, 500) + "...";
+
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <img src="${imageUrl}" alt="visuel" class="image">
+          <span class="badge ${badgeType}">${badgeText}</span>
+          <div class="title"><a href="${item.link}" target="_blank">${item.title}</a></div>
+          <div class="date">${pubDate}</div>
+          <div class="desc">${description}</div>
+        `;
+
+        container.appendChild(card);
+      });
+    }
+
+    loadRSS();
+  </script>
+</body>
+</html>
