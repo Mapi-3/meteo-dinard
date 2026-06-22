@@ -1,1 +1,32 @@
+name: Update liste groupes
 
+on:
+  repository_dispatch:
+    types: [update_liste_groupes]
+
+permissions:
+  contents: write
+
+jobs:
+  update-file:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Update liste-groupes.html
+        run: |
+          echo "${{ github.event.client_payload.html_base64 }}" | base64 -d > liste-groupes.html
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add liste-groupes.html
+          if git diff --cached --quiet; then
+            echo "Aucun changement à publier"
+          else
+            git commit -m "Mise à jour liste groupes accueillis"
+            git push
+          fi
